@@ -22,9 +22,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="wanghao-admin" />
-        <module name="wanghao-api" />
-        <module name="wanghao-cms" />
         <module name="wanghao-common" />
         <module name="wanghao-pay" />
         <module name="wanghao-ucenter" />

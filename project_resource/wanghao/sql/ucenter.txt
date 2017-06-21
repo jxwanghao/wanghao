@@ -1,0 +1,135 @@
+
+drop table if exists user_info;
+create table user_info (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  user_id varchar(32) NOT NULL COMMENT '用户ID',
+  password char(32) NOT NULL COMMENT '32位MD5值',
+  phone char(20) DEFAULT NULL COMMENT '手机号',
+  email varchar(100) DEFAULT NULL COMMENT '邮箱',
+  reg_type char(1) NOT NULL COMMENT '1：手机，2：邮箱，3：其它',
+  terminal varchar(10) DEFAULT NULL COMMENT 'iOS、Android、H5、PC',
+  province varchar(20) DEFAULT NULL COMMENT '所属省',
+  city varchar(20) DEFAULT NULL COMMENT '所属市',
+  reg_ip varchar(128) DEFAULT NULL COMMENT '考虑到IPV6的情况',
+  gps varchar(40) DEFAULT NULL COMMENT '经,纬度',
+  state char(1) NOT NULL DEFAULT '1' COMMENT '1：启用，2：锁定，3：黑名单，4：删除，5：注销',
+  header varchar(100) DEFAULT NULL COMMENT '用户头像URL',
+  name varchar(32) DEFAULT NULL COMMENT '用户姓名',
+  nick varchar(20) DEFAULT NULL COMMENT '昵称',
+  birthday char(10) DEFAULT NULL COMMENT 'yyyy-mm-dd',
+  id_card varchar(18) DEFAULT NULL COMMENT '脱敏信息，前4后3',
+  id_card_cip varchar(128) DEFAULT NULL COMMENT '加密的身份证信息、需可逆',
+  sex char(1) COMMENT '1:男; 2:女;',
+  create_time char(19) NOT NULL COMMENT '注册时间',
+  remark varchar(100) DEFAULT NULL COMMENT '备注',
+  auth_time char(19) DEFAULT NULL COMMENT '实名认证时间.填写认证信息时填写此时间',
+  phone_time char(19) DEFAULT NULL COMMENT '手机认证时间; 手机最后绑定时间.',
+  auth_site varchar(255) DEFAULT NULL COMMENT '已授权过的网站,多个用半角逗号分隔',
+  PRIMARY KEY (id),
+  UNIQUE KEY idx_user_id (user_id),
+  UNIQUE KEY idx_email (email),
+  UNIQUE KEY idx_phone (phone)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+
+drop table if exists oauth_token;
+create table oauth_token (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  user_id varchar(32) NOT NULL COMMENT '用户账号',
+  app_id char(8) NOT NULL COMMENT '应用id',
+  third_id varchar(32) DEFAULT NULL COMMENT '用户在第三方id',
+  access_token char(32) NOT NULL COMMENT '对应于登陆的session_token',
+  create_time char(19) NOT NULL COMMENT '创建时间',
+  expire_time char(19) NOT NULL COMMENT '过期时间',
+  PRIMARY KEY (id),
+  UNIQUE KEY idx_token (access_token)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='SSO访问码';
+
+drop table if exists city_config;
+create table city_config (
+  id int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  province_code varchar(50) DEFAULT NULL COMMENT '省份编码',
+  city_code varchar(50) DEFAULT NULL COMMENT '市编码',
+  name varchar(50) DEFAULT NULL COMMENT '市名称',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='市枚举配置';
+
+
+drop table if exists county_config;
+create table county_config (
+  id int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  city_code varchar(50) DEFAULT NULL COMMENT '市编码',
+  county_code varchar(50) DEFAULT NULL COMMENT '县/区编码',
+  name varchar(50) DEFAULT NULL COMMENT '名称',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='县/区枚举配置';
+
+drop table if exists user_log;
+create table user_log (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  user_id varchar(32)  NOT NULL COMMENT '用户账号',
+  opt_type varchar(10)  NOT NULL COMMENT '操作类型',
+  opt_note varchar(100)  DEFAULT NULL COMMENT '描述操作变更的内容,变更前和变更后的值',
+  ip varchar(128)  DEFAULT NULL COMMENT 'IP',
+  gps varchar(40)  DEFAULT NULL COMMENT '逗号分隔的经纬度',
+  create_time char(19)  NOT NULL COMMENT '创建时间',
+  terminal char(2)  DEFAULT NULL COMMENT '操作终端',
+  remark varchar(200)  DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (id),
+  KEY idx_create_time (create_time),
+  KEY idx_user (user_id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户日志,主要记录用户的特定日志; 注册, 登陆, 绑卡,认证, 投资, 修改密码等';
+
+
+drop table if exists user_role;
+create table user_role (
+  user_id int(11) NOT NULL,
+  role_id int(11) NOT NULL,
+  PRIMARY KEY (user_id,role_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
+
+
+drop table if exists role;
+create table role (
+  role_id int(11) NOT NULL AUTO_INCREMENT,
+  role_code varchar(20) DEFAULT NULL,
+  role_name varchar(40) DEFAULT NULL,
+  status int(2) DEFAULT NULL,
+  remark varchar(100) DEFAULT NULL,
+  create_by int(11) DEFAULT NULL,
+  update_by int(11) DEFAULT NULL,
+  create_time datetime DEFAULT NULL,
+  update_time datetime DEFAULT NULL,
+  PRIMARY KEY (role_id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='角色表';
+
+
+drop table if exists role_resource;
+create table role_resource (
+  role_id int(11) NOT NULL COMMENT '角色ID',
+  resource_id int(11) NOT NULL COMMENT '资源ID',
+  PRIMARY KEY (role_id,resource_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色资源表';
+
+
+
+drop table if exists resource;
+create table resource (
+  resource_id int(11) NOT NULL AUTO_INCREMENT,
+  parent_id int(11) DEFAULT NULL COMMENT 'MENU树的父节点',
+  parent_ids varchar(255) DEFAULT NULL COMMENT 'MENU树的子节点',
+  name varchar(40) DEFAULT NULL COMMENT '名字',
+  code varchar(40) DEFAULT NULL COMMENT '资源码（权限码）',
+  level int(2) DEFAULT NULL,
+  type varchar(10) DEFAULT NULL COMMENT '''MENU'',''BUTTON'',''LINK''',
+  sequence int(8) DEFAULT NULL,
+  status int(2) DEFAULT NULL,
+  icon varchar(40) DEFAULT NULL,
+  color varchar(12) DEFAULT NULL,
+  link varchar(255) DEFAULT NULL,
+  remark varchar(100) DEFAULT NULL,
+  PRIMARY KEY (resource_id),
+  KEY parent_id (parent_id) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='资源表';
+
+

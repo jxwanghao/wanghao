@@ -3,9 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/jxwanghao.iml" filepath="$PROJECT_DIR$/.idea/jxwanghao.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wanghao-admin/wanghao-admin.iml" filepath="$PROJECT_DIR$/wanghao-admin/wanghao-admin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wanghao-api/wanghao-api.iml" filepath="$PROJECT_DIR$/wanghao-api/wanghao-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wanghao-cms/wanghao-cms.iml" filepath="$PROJECT_DIR$/wanghao-cms/wanghao-cms.iml" />
       <module fileurl="file://$PROJECT_DIR$/wanghao-common/wanghao-common.iml" filepath="$PROJECT_DIR$/wanghao-common/wanghao-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/wanghao-pay/wanghao-pay.iml" filepath="$PROJECT_DIR$/wanghao-pay/wanghao-pay.iml" />
       <module fileurl="file://$PROJECT_DIR$/wanghao-ucenter/wanghao-ucenter.iml" filepath="$PROJECT_DIR$/wanghao-ucenter/wanghao-ucenter.iml" />
